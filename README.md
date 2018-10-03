@@ -1,1 +1,1 @@
-# Haskell101
+# Class101
