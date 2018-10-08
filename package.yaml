@@ -22,6 +22,10 @@ description:         Please see the README on GitHub at <https://github.com/matt
 dependencies:
 - base >= 4.7 && < 5
 - sdl2
+- sdl2-image
+- text
+- linear
+#- helm
 
 library:
   source-dirs: src
