@@ -41,6 +41,7 @@ sendMessageApp msg sock = do
     putStrLn "Connexion accepted."
     WS.sendTextData conn (pack msg)
     putStrLn "Message sent."
+    WS.sendTextData conn (pack "CLOSE_CONNECTION")
 
 sendMessage :: String -> IO ()
 sendMessage = runSocketApp . sendMessageApp

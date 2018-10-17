@@ -1,4 +1,5 @@
 import Communication (sendMessage)
+import System.Environment
 
 main :: IO ()
-main = sendMessage "Titi"
+main = unwords <$> getArgs >>= sendMessage
