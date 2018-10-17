@@ -25,14 +25,11 @@ function create()
 	msgText = this.add.text(16, 16, "", {fontSize: '32px', fill: '#fff'});
 
 	var socket = new WebSocket("ws://localhost:" + portNumber);
-	socket.onopen = function() {
-		console.log("Connected.");
-	};
 	socket.onmessage = function(e) {
 		msgText.setText("Message received: " + e.data);
 	};
 	socket.onclose = function() {
-		console.log("End connexion");
+		socket = new WebSocket("ws://localhost:" + portNumber);
 	};
 }
 
