@@ -2,6 +2,7 @@ var config = {
 	type: Phaser.AUTO,
 	width:  800,
 	height: 600,
+	pixelArt: true, // no aliasing
 
 	physics: {
 		default: 'arcade',
@@ -53,13 +54,6 @@ function create()
 	camera.setZoom(2.0);
 
 	cursors = this.input.keyboard.createCursorKeys();
-
-	this.add.text(16, 16, "Hello world", {
-					  font: '18px monospace',
-					  fill: '#ffffff',
-					  padding: {x: 20, y: 10},
-				  })
-	    .setScrollFactor(0.5);
 }
 
 function update(time, dt)
