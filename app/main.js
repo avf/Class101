@@ -1,84 +1,69 @@
-var config = {
+class App extends Phaser.Scene {
+	constructor() {
+		super('App');
+		this.messages;
+	}
+
+	preload() {
+	}
+
+	create() {
+		this.messages = new Messages(this)
+		this.messages.add_messages(DLG_INTRO);
+
+		this.scene.launch('LabRoom');
+		// this.scene.get('LabRoom').set_dialogue(DLG_INTRO);
+	}
+
+	set_character_frame(frame) {
+		this.scene.get('LabRoom').set_character_frame(frame);
+	}
+}
+
+class LabRoom extends Phaser.Scene {
+	constructor() {
+		super('LabRoom');
+	}
+
+	preload() {
+		this.load.spritesheet('character', "assets/img/character.png", {
+			frameWidth: 18,
+			frameHeight: 20,
+		});
+
+		this.load.tilemapTiledJSON('labMap', "assets/levels/labroom.json");
+		this.load.image('labTiles', "assets/tiles/roguelike.png");
+	}
+
+	create() {
+		const map = this.make.tilemap({ key: 'labMap' });
+		const tileset = map.addTilesetImage('roguelike', 'labTiles');
+
+		map.createStaticLayer('Ground', tileset, 0, 0);
+		map.createStaticLayer('Furniture', tileset, 0, 0);
+		map.createStaticLayer('Objects', tileset, 0, 0);
+		// map.createStaticLayer('AboveGround', tileset, 0, 0);
+
+		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+		this.cameras.main.setZoom(4.0);
+
+		this.character = this.add.sprite(character.spawn.x * 16 + 9,
+			                             character.spawn.y * 16 + 10,
+			                             'character');
+		this.character.setFrame(character.frame.idle_front);
+	}
+
+	set_character_frame(frame) {
+		this.character.setFrame(frame);
+	}
+}
+
+let config = {
 	type: Phaser.AUTO,
-	width:  800,
-	height: 600,
-	pixelArt: true, // no aliasing
-
-	physics: {
-		default: 'arcade',
-		arcade: {
-			gravity: { y: 0 },
-		},
-	},
-
-	scene: {
-		preload: preload,
-		create: create,
-		update: update
-	},
+	width: 640,
+	height: 640,
+	pixelArt: true,
+	scene: [App, LabRoom],
 };
 
-const game = new Phaser.Game(config);
-let controls;
-let robot;
-let cursors;
-const speed = 200;
-
-function preload()
-{
-	this.load.image('tiles', "asset/roguelike.png");
-	this.load.tilemapTiledJSON('map', "asset/map.json");
-	this.load.spritesheet('robot',
-		"asset/robot.png",
-        {frameWidth: 32, frameHeight: 32, endFrame: 2});
-}
-
-function create()
-{
-	const map     = this.make.tilemap({ key: 'map' });
-	const tileset = map.addTilesetImage('roguelike', 'tiles');
-
-	const ground_layer         = map.createStaticLayer('Ground', tileset, 0, 0);
-	const objects_layer        = map.createStaticLayer('Objects', tileset, 0, 0);
-	const above_ground_layer   = map.createStaticLayer('AboveGround', tileset, 0, 0);
-	above_ground_layer.setDepth(10);
-
-	objects_layer.setCollisionByProperty({ obstacle: true });
-
-	robot = this.physics.add.sprite(38, 38, 'robot');
-
-	this.physics.add.collider(robot, objects_layer);
-
-	this.anims.create({ key: 'walking',
-		                frames: this.anims.generateFrameNumbers('robot', {start: 0, end: 2}),
-		                frameRate: 20 });
-
-	camera = this.cameras.main;
-	camera.startFollow(robot);
-	camera.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-	camera.setZoom(2.0);
-
-	cursors = this.input.keyboard.createCursorKeys();
-}
-
-function update(time, dt)
-{
-	robot.body.setVelocity(0);
-
-	if(cursors.left.isDown)
-		robot.body.setVelocityX(-100);
-	else if(cursors.right.isDown)
-		robot.body.setVelocityX( 100);
-
-	if(cursors.up.isDown)
-		robot.body.setVelocityY(-100);
-	else if(cursors.down.isDown)
-		robot.body.setVelocityY( 100);
-
-	robot.body.velocity.normalize().scale(speed);
-
-	if(robot.body.velocity.length() == 0.0)
-		robot.anims.stop();
-	else
-		robot.anims.play('walking', true);
-}
+let game = new Phaser.Game(config);

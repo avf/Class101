@@ -1,0 +1,68 @@
+@font-face {
+	font-family: 'unifont';
+	src: href('font/unifont.ttf');
+}
+
+html, body {
+	height: 100%;
+}
+
+body {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	background-color: #000000;
+}
+
+canvas {
+	display: none;
+}
+
+#messages {
+	margin-right: 2em;
+	padding-left: 1em;
+
+	height: 640px;
+	width: 30em;
+
+	overflow-y: auto;
+	direction: rtl;
+
+	font-family: unifont, monospace;
+
+	-moz-user-select: none; /* Firefox */
+	user-select: none;
+}
+
+#messages div {
+	color: white;
+	border-radius: 2px;
+	margin-bottom: 1ex;
+	padding: 1ex;
+	direction: ltr;
+}
+
+#messages .character_message {
+	background-color: #050;
+	margin-right: 5em;
+}
+
+#messages .system_message {
+	background-color: #555;
+}
+
+#messages .answer {
+	margin-left: 5em;
+	background-color: #005;
+}
+
+#messages .answer:hover {
+	margin-left: 5em;
+	background-color: #057;
+}
+
+#messages .user_message {
+	margin-left: 5em;
+	background-color: #005;
+}
