@@ -3,16 +3,14 @@
 	src: href('font/unifont.ttf');
 }
 
-html, body {
-	height: 100%;
+body {
+	background-color: #000;
+	font-family: unifont, monospace;
 }
 
-body {
+#game {
 	display: flex;
 	justify-content: center;
-	align-items: center;
-
-	background-color: #000000;
 }
 
 canvas {
@@ -29,23 +27,27 @@ canvas {
 	overflow-y: auto;
 	direction: rtl;
 
-	font-family: unifont, monospace;
-
-	-moz-user-select: none; /* Firefox */
+	-moz-user-select: none;
 	user-select: none;
 }
 
 #messages div {
-	color: white;
-	border-radius: 2px;
 	margin-bottom: 1ex;
 	padding: 1ex;
+
 	direction: ltr;
+
+	border-radius: 2px;
+
+	color: white;
+
+	hyphens: auto;
 }
 
 #messages .character_message {
-	background-color: #050;
 	margin-right: 5em;
+
+	background-color: #050;
 }
 
 #messages .system_message {
@@ -54,15 +56,116 @@ canvas {
 
 #messages .answer {
 	margin-left: 5em;
+
 	background-color: #005;
 }
 
 #messages .answer:hover {
 	margin-left: 5em;
+
 	background-color: #057;
 }
 
 #messages .user_message {
 	margin-left: 5em;
+
 	background-color: #005;
+}
+
+#notes {
+	visibility: hidden;
+
+	display: flex;
+	justify-content: center;
+
+	margin-top: 4ex;
+
+	border: thin solid #222;
+
+	color: #999;
+}
+
+legend {
+	color: #555;
+}
+
+#notes-tabs {
+	margin-left: 1em;
+	margin-right: 1em;
+
+	max-width: 20%;
+}
+
+#notes-tabs > div {
+	padding: 1ex;
+
+	color: #555;
+}
+
+#notes-tabs > div:hover {
+	background: #222;
+	color: #999;
+}
+
+#notes-tabs > div.selected {
+	background: #222;
+	color: #fff;
+}
+
+#notes-content {
+	display: flex;
+	flex-direction: column;
+
+	max-width: 40em;
+
+	hyphens: auto;
+}
+
+#notes-content > div, #Terminology > div{
+	visibility: hidden;
+	height: 0;
+	order: 1;
+}
+
+#notes-content > div.shown {
+	visibility: visible;
+	height: auto;
+	order: 0;
+}
+
+#Terminology > div.shown {
+	visibility: inherit;
+	height: auto;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+
+h2 {
+	display: inline;
+
+	font-size: 1.05em;
+}
+
+div.code {
+	padding: 1ex;
+	margin: 1ex;
+	padding-left: 2em;
+	background: #222;
+}
+
+span.code {
+	padding: 0.5ex;
+	background: #222;
+	white-space: nowrap;
+}
+
+#messages span.code {
+	padding-top: 0;
+	padding-bottom: 0.25ex;
+}
+
+a, a:visited {
+	color: #09f
 }

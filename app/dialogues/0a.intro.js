@@ -1,9 +1,7 @@
 const DLG_INTRO = [
 	{
-		action: 'disable_canvas',
-
 		className: 'system_message',
-		text: ["Receiving temporal message. Click to synchronise to next message."],
+		text: ["Incoming telechrone message. Click to synchronise to next message."],
 	},
 
 	{
@@ -29,7 +27,7 @@ const DLG_INTRO = [
 	},
 
 	{
-		action: ["enable_canvas"],
+		action: [["enable_canvas"]],
 		text: ["There we go!"],
 	},
 
@@ -86,5 +84,15 @@ const DLG_INTRO = [
 	{
 		character_frame: 'arms_up',
 		text: ["Alright! I'm going to teach you Haskell!"]
-	}
+	},
+
+	{
+		action: [['enable_notes']],
+		text: ["I'll put notes down there for you to read if you forget something.",
+		       "Let's get started!"],
+	},
+
+	{
+		action: [['next_level']],
+	},
 ]

@@ -9,17 +9,95 @@
 
 		<script src="lib/phaser.min.js"> </script>
 
-		<script src="app/dialogues/intro.js"> </script>
+		<script src="app/dialogues/0a.intro.js"> </script>
+		<script src="app/dialogues/0b.setup.js"> </script>
+		<script src="app/dialogues/level1.js"> </script>
 
 		<script src="app/character.js"> </script>
+		<script src="app/levels.js"> </script>
+
 		<script src="app/messages.js"> </script>
+		<script src="app/notes.js"> </script>
 		<script src="app/main.js"> </script>
 	</head>
 
 	<body>
 
-		<div id="messages">
+		<div id="game">
+			<div id="messages">
+			</div>
 		</div>
+
+		<fieldset id="notes">
+			<legend>Notes</legend>
+			<div id="Installing Haskell">
+				<h1>Installing Haskell</h1>
+
+				<ul>
+					<li></li>
+				</ul>
+			</div>
+
+			<div id="Setting up Haskell">
+				<h1>Setting up Haskell</h1>
+
+				<h2>Installing Stack</h2>
+
+				<p>
+				Stack is a tool to manage Haskell projects. It can be used to
+				install GHC (Haskell's compiler) and the libraries that your
+				project needs.
+				</p>
+
+				<p>
+				To install Stack, go to
+				<a href="https://docs.haskellstack.org/en/stable/install_and_upgrade/">https://docs.haskellstack.org/en/stable/install_and_upgrade/</a>
+				and follow the instructions corresponding to your platform.
+				</p>
+
+				<h2>Setting up Stack</h2>
+
+				<p>
+				When Stack is installed, you need to set it up so that it
+				actually installs GHC. Since Stack doesn't have a graphical
+				interface, you'll have to use the command line. If you're using
+				GNU/Linux or MacOS, launch the Terminal application. If you're
+				using Windows, launch cmd.exe.
+				</p>
+
+				<p>
+				To setup stack, type the command
+				<span class='code'>stack setup</span>.
+				</p>
+
+			</div>
+
+			<div id="Compiling Haskell">
+				<h1>First Program</h1>
+
+				Here's a program that prints ‘Hello world!’:
+
+				<div class="code">
+					main = putStrLn "Hello world!"
+				</div>
+			</div>
+
+			<div id="Haskell expressions">
+				<h1>Haskell expressions</h1>
+
+				Yaddiyadda blablabla lorem ipsum.
+			</div>
+
+			<div id="Terminology">
+				<h1>Terminology</h1>
+
+				<div id="Referential transparency">
+					Functions in Haskell are referetially transparent. That
+					means that writing a function call has the same effect as 
+					writing the return value of the function call.
+				</div>
+			</div>
+		</fieldset>
 
 	</body>
 

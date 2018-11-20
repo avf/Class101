@@ -2,21 +2,55 @@ class App extends Phaser.Scene {
 	constructor() {
 		super('App');
 		this.messages;
+		this.notes;
+		this.level = 0;
 	}
 
 	preload() {
 	}
 
 	create() {
-		this.messages = new Messages(this)
-		this.messages.add_messages(DLG_INTRO);
-
 		this.scene.launch('LabRoom');
-		// this.scene.get('LabRoom').set_dialogue(DLG_INTRO);
+
+		this.messages = new Messages(this)
+		this.notes = new Notes();
+
+		this.load_level(this.level);
+	}
+
+	next_level() {
+		this.level++;
+		this.load_level(this.level);
+	}
+
+	load_level(level) {
+		this.level = level;
+
+		this.messages.clear();
+		this.messages.add_messages(LEVELS[level].dialogue);
+
+		LEVELS[level].notes.forEach(note => this.enable_note(note));
+		LEVELS[level].terms.forEach(term => this.enable_term(term));
+
+		if(LEVELS[level].canvasVisible) {
+			document.getElementsByTagName('canvas')[0].style.display = 'block';
+		}
+
+		if(LEVELS[level].notesVisible) {
+			document.getElementById('notes').style.visibility = 'visible';
+		}
 	}
 
 	set_character_frame(frame) {
 		this.scene.get('LabRoom').set_character_frame(frame);
+	}
+
+	enable_note(note_name) {
+		this.notes.enable_tab(note_name);
+	}
+
+	enable_term(term_name) {
+		this.notes.enable_term(term_name);
 	}
 }
 
@@ -63,6 +97,7 @@ let config = {
 	width: 640,
 	height: 640,
 	pixelArt: true,
+	parent: 'game',
 	scene: [App, LabRoom],
 };
 
