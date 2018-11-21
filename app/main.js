@@ -1,21 +1,34 @@
 class App extends Phaser.Scene {
 	constructor() {
 		super('App');
-		this.messages;
-		this.notes;
 		this.level = 0;
 	}
 
 	preload() {
+		this.load.image('roguelike', "assets/tiles/roguelike.png");
+
+		this.load.spritesheet('character', "assets/img/character.png", {
+			frameWidth: 18,
+			frameHeight: 20,
+		});
+
+		this.load.spritesheet('robot', "assets/img/robot.png", {
+			frameWidth: 32,
+			frameHeight: 32,
+		});
+
+		this.load.tilemapTiledJSON('labMap', "assets/levels/labroom.json");
+		this.load.tilemapTiledJSON('level1', "assets/levels/level1.json");
 	}
 
 	create() {
-		this.scene.launch('LabRoom');
-
 		this.messages = new Messages(this)
 		this.notes = new Notes();
 
 		this.load_level(this.level);
+
+		this.scene.launch('LabRoom');
+		this.currentScene = this.scene.get('LabRoom');
 	}
 
 	next_level() {
@@ -39,6 +52,12 @@ class App extends Phaser.Scene {
 		if(LEVELS[level].notesVisible) {
 			document.getElementById('notes').style.visibility = 'visible';
 		}
+
+		if(typeof LEVELS[level].room !== "undefined") {
+			this.scene.launch('RobotRoom');
+			this.scene.get('RobotRoom').load_room(LEVELS[level].room);
+			this.scene.setVisible(false, this.scene.get('RobotRoom'));
+		}
 	}
 
 	set_character_frame(frame) {
@@ -52,43 +71,15 @@ class App extends Phaser.Scene {
 	enable_term(term_name) {
 		this.notes.enable_term(term_name);
 	}
-}
 
-class LabRoom extends Phaser.Scene {
-	constructor() {
-		super('LabRoom');
-	}
+	set_scene(scene) {
+		this.currentScene.on_disable();
+		this.scene.setVisible(false, this.currentScene);
 
-	preload() {
-		this.load.spritesheet('character', "assets/img/character.png", {
-			frameWidth: 18,
-			frameHeight: 20,
-		});
+		this.currentScene = this.scene.get(scene);
 
-		this.load.tilemapTiledJSON('labMap', "assets/levels/labroom.json");
-		this.load.image('labTiles', "assets/tiles/roguelike.png");
-	}
-
-	create() {
-		const map = this.make.tilemap({ key: 'labMap' });
-		const tileset = map.addTilesetImage('roguelike', 'labTiles');
-
-		map.createStaticLayer('Ground', tileset, 0, 0);
-		map.createStaticLayer('Furniture', tileset, 0, 0);
-		map.createStaticLayer('Objects', tileset, 0, 0);
-		// map.createStaticLayer('AboveGround', tileset, 0, 0);
-
-		this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-		this.cameras.main.setZoom(4.0);
-
-		this.character = this.add.sprite(character.spawn.x * 16 + 9,
-			                             character.spawn.y * 16 + 10,
-			                             'character');
-		this.character.setFrame(character.frame.idle_front);
-	}
-
-	set_character_frame(frame) {
-		this.character.setFrame(frame);
+		this.scene.setVisible(true, this.currentScene);
+		this.currentScene.on_enable();
 	}
 }
 
@@ -98,7 +89,7 @@ let config = {
 	height: 640,
 	pixelArt: true,
 	parent: 'game',
-	scene: [App, LabRoom],
+	scene: [App, RobotRoom, LabRoom],
 };
 
 let game = new Phaser.Game(config);

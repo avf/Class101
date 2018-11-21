@@ -79,9 +79,9 @@ class Messages
 			}
 
 			if(typeof this.current_node.character_frame !== 'undefined') {
-				this.game.set_character_frame(character.frame[this.current_node.character_frame]);
+				this.game.set_character_frame(CHARACTER.frame[this.current_node.character_frame]);
 			} else {
-				this.game.set_character_frame(character.frame.idle_front);
+				this.game.set_character_frame(CHARACTER.frame.idle_front);
 			}
 
 			this.run();
@@ -113,6 +113,11 @@ class Messages
 
 			case "next_level": {
 				this.game.next_level();
+				break;
+			}
+
+			case "set_scene": {
+				this.game.set_scene(action[1]);
 				break;
 			}
 		}

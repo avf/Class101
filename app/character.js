@@ -1,4 +1,4 @@
-const character = {
+const CHARACTER = {
 	spawn: {x: 2, y: 3},
 
 	animation: {

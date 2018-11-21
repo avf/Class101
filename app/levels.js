@@ -21,5 +21,9 @@ const LEVELS = [
 		notesVisible: true,
 		notes: ['Setting up Haskell', 'Compiling Haskell', 'Haskell expressions', 'Terminology'],
 		terms: ['Referencial transparency'],
+		room: {
+			map: "level1",
+			spawn: {x: 5, y: 5},
+		},
 	},
 ];

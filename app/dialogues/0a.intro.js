@@ -1,7 +1,7 @@
 const DLG_INTRO = [
 	{
 		className: 'system_message',
-		text: ["Incoming telechrone message. Click to synchronise to next message."],
+		text: ["Incoming telechrone communication. Click to synchronise to next message."],
 	},
 
 	{
