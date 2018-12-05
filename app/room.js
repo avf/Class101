@@ -11,20 +11,23 @@ class RobotRoom extends Phaser.Scene {
 		this.energy = 0;
 	}
 
-	update() {
+	update(time, dt) {
 		if(this.energy > 0) {
 			this.robot.body.setVelocityX(this.direction.x);
 			this.robot.body.setVelocityY(this.direction.y);
 
 			this.robot.anims.play('walking', true);
 
-			this.energy -= 1;
+			this.energy -= (this.velocity * dt)/1000.0;
 
-			console.log("-- ", this.energy);
-		} else {
-			this.robot.body.setVelocityX(0);
-			this.robot.body.setVelocityY(0);
-			this.robot.anims.pause();
+			if(this.energy <= 0.0) {
+				this.robot.body.setVelocityX(0);
+				this.robot.body.setVelocityY(0);
+				this.robot.anims.pause();
+
+				this.robot.x = Math.round(this.robot.x);
+				this.robot.y = Math.round(this.robot.y);
+			}
 		}
 	}
 
@@ -90,10 +93,6 @@ class RobotRoom extends Phaser.Scene {
 		this.direction = { x: this.velocity * dx / norm,
 		                   y: this.velocity * dy / norm };
 		this.energy = norm;
-
-		console.log("Moving :");
-		console.log("\tEnergy: ", this.energy);
-		console.log("\tDirection: ", this.direction.x, this.direction.y);
 	}
 
 	process(data) {
@@ -106,6 +105,11 @@ class RobotRoom extends Phaser.Scene {
 				let dx = parseInt(command[1]);
 				let dy = parseInt(command[2]);
 				this.move(dx, dy);
+				break;
+
+			case "get_position":
+				retval = this.robot.x.toString() + " "
+				       + this.robot.y.toString();
 				break;
 		}
 
