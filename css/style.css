@@ -151,19 +151,23 @@ h2 {
 div.code {
 	padding: 1ex;
 	margin: 1ex;
+
+	color: #fff;
+
 	padding-left: 2em;
 	background: #222;
 }
 
 span.code {
-	padding: 0.5ex;
-	background: #222;
-	white-space: nowrap;
-}
-
-#messages span.code {
 	padding-top: 0;
 	padding-bottom: 0.25ex;
+	padding-left: 0.5ex;
+	padding-right: 0.5ex;
+
+	background: #222;
+	color: #fff;
+
+	white-space: nowrap;
 }
 
 a, a:visited {

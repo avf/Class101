@@ -3,8 +3,10 @@
 <html lang="en">
 
 	<head>
-		<title>Class 101</title>
 		<meta charset="utf-8">
+
+		<title>Class 101</title>
+
 		<link rel="stylesheet" type="text/css" href="css/style.css">
 
 		<script src="lib/phaser.min.js"> </script>
@@ -77,19 +79,129 @@
 			</div>
 
 			<div id="Compiling Haskell">
-				<h1>First Program</h1>
+				<h1>Compiling Haskell</h1>
 
-				Here's a program that prints ‘Hello world!’:
+				<p>
+					Here's a program that prints ‘Hello world!’:
+				</p>
 
 				<div class="code">
 					main = putStrLn "Hello world!"
 				</div>
+
+				<p>
+					To compile it, put it in a file, save it with the extension
+					.hs and compile it with
+					<span class="code">stack ghc -- program.hs</span>.
+				</p>
+
+				<p>
+					A Haskell program should define the identifier
+					<span class="code">main</span> which corresponds to an
+					‘action’ that the program should perform.
+				</p>
+
+				<p>
+					The function
+					<span class="code">putStrLn</span> takes as argument a
+					string and returns the action of displaying that string on
+					the standard output, followed by a new line.
+				</p>
+
+				<p>
+					You can add comments with
+					<span class="code">-- comment</span> or with
+					<span class="code">{- comment -}</span>.
+				</p>
 			</div>
 
 			<div id="Haskell expressions">
-				<h1>Haskell expressions</h1>
+				<h1>Haskell's expressions</h1>
 
-				Yaddiyadda blablabla lorem ipsum.
+				<h2>Definition</h2>
+
+				<p>
+					An expression is an item in Haskell which corresponds to a
+					value. It can be a plain value, like 42 or 'c', or a
+					function call. Because of <strong>referential
+					transparency</strong>, everywhere you have a function call,
+					you can replace it with the value it returns.
+				</p>
+
+				<h2>Calling functions</h2>
+
+				<p>
+					To call a function, you write the name of a function
+					followed by its arguments. For example:
+					<span class="code">div 3 2</span> to call the function div
+					with arguments 3 and 2.
+				</p>
+
+				<p>
+					In Haskell, functions can be called in <em>prefix</em> form
+					or in <em>infix</em> form.<br>
+
+					In prefix form, you put the function name at the
+					beginning. This is the default for most functions. You can
+					call operators in prefix form by putting parenthesis around
+					them, for example <span class="code">(+) 2 2</span> is the
+					same as <span class="code">2 + 2</span>.<br>
+
+					In infix form, you put the function name after the first
+					argument. This is the default for operators. You can
+					call other functions in infix form by putting backquotes
+					around them, for example
+					<span class="code">10 `div` 3</span> is the same as
+					<span class="code">div 10 3</span>.
+				</p>
+
+				<h2>Basic types</h2>
+
+				<p>
+					Haskell is a strongly typed language, which means values
+					have types, and you can't just give whatever value you feel
+					like to a function. To know the type of an expression, you
+					can use the command <span class="code">:t expr</span> in
+					GHCi. Here are some basic types:
+
+					<ul>
+						<li><span class="code">Int</span></li>
+						<li><span class="code">Double</span></li>
+						<li><span class="code">Char</span></li>
+						<li><span class="code">String</span></li>
+						<li><span class="code">IO ()</span></li>
+					</ul>
+
+					Note: the last type corresponds to an IO action. It is
+					the type of the return value of
+					<span class="code">putStrLn</span>.
+				</p>
+
+				<p>
+					Now, if you have tried something like
+					<span class="code">:t 42</span> in GHCi, you may have been
+					surprised that you didn't get <span class="code">Int</span>.
+					If you tried it, you would get something like
+					<span class="code">Num p => p</span>. This is because the
+					symbol <span class="code">4</span> can be interpreted as
+					several different types (it could be an integer or a
+					floating-point number). But Haskell knows that it's a
+					number, which is what ‘Num’ stands for. Although it's
+					strongly typed, Haskell can do <strong>type
+					inference</strong>, and it guesses the type of an expression
+					based on the context in which it appears. Since there is no
+					context here, Num is the best it can do.
+				</p>
+
+				<h2>Example expressions</h2>
+
+				<p>
+					<span class="code">'c'</span><br>
+					<span class="code">3 + 2 * 5 - 1</span><br>
+					<span class="code">4 / 5</span> (floating-point division)<br>
+					<span class="code">15 `mod` 2</span> (modulo function)<br>
+					<span class="code">3 + (cos 0) / (sin (-1))</span><br>
+				</p>
 			</div>
 
 			<div id="Terminology">
@@ -97,8 +209,8 @@
 
 				<div id="Referential transparency">
 					Functions in Haskell are referetially transparent. That
-					means that writing a function call has the same effect as 
-					writing the return value of the function call.
+					means that writing a function call has the same effect as
+					writing its return value.
 				</div>
 			</div>
 		</fieldset>

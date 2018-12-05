@@ -5,11 +5,25 @@ const DLG_LEVEL1 = [
 
 	{
 		action: [["set_scene", "RobotRoom"]],
-		text: ["Here's the robot."],
+		text: ["Here's my robot. Isn't he cute?"],
+
+		answers: {
+			'He\'s kind of cute': [
+				{text: ["I know right?"]},
+			],
+
+			'No.': [
+				{text: ["Hey! You don't talk to my robot like that!",
+				"It's okay Roberto, don't listen to them, they're stupid."]},
+			],
+
+			'I have arachnophobia...': [
+				{text: ["What? But he only has six legs!"]},
+			],
+		},
 	},
 
 	{
-		action: [["set_scene", "LabRoom"]],
-		text: ["No, wait, let me show you my room instead."],
+		text: ["blah"],
 	},
 ];

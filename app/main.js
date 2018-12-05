@@ -1,7 +1,7 @@
 class App extends Phaser.Scene {
 	constructor() {
 		super('App');
-		this.level = 0;
+		this.level = 2;
 	}
 
 	preload() {
@@ -89,6 +89,14 @@ let config = {
 	height: 640,
 	pixelArt: true,
 	parent: 'game',
+
+	physics: {
+		default: 'arcade',
+		arcade: {
+			gravity: {y: 0}
+		},
+	},
+
 	scene: [App, RobotRoom, LabRoom],
 };
 
