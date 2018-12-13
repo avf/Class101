@@ -1,6 +1,6 @@
 @font-face {
 	font-family: 'unifont';
-	src: href('font/unifont.ttf');
+	src: url('unifont.ttf');
 }
 
 body {

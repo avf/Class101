@@ -81,6 +81,14 @@ class App extends Phaser.Scene {
 		this.scene.setVisible(true, this.currentScene);
 		this.currentScene.on_enable();
 	}
+
+	wait_cond(predicate, callback) {
+		if(predicate(this.scene.get('RobotRoom').robot))
+			callback()
+		else
+			setTimeout(() => this.wait_cond(predicate, callback),
+				       100);
+	}
 }
 
 let config = {

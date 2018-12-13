@@ -84,7 +84,15 @@ class Messages
 				this.game.set_character_frame(CHARACTER.frame.idle_front);
 			}
 
-			this.run();
+			if(typeof this.current_node.wait_cond !== 'undefined') {
+				this.element.onclick = function() {};
+				this.game.wait_cond(this.current_node.wait_cond, () => {
+					this.run();
+					this.element.onclick = () => this.run();
+				});
+			} else {
+				this.run();
+			}
 		}
 	}
 

@@ -1,14 +1,24 @@
+const DOOR_OPEN_LEFT    = 489;
+const DOOR_OPEN_RIGHT   = 490;
+const DOOR_CLOSED_LEFT  = 379;
+const DOOR_CLOSED_RIGHT = 380;
+const DOOR_LOCKED_LEFT  = 322;
+const DOOR_LOCKED_RIGHT = 323;
+
 class RobotRoom extends Phaser.Scene {
 	constructor() {
 		super('RobotRoom');
 		this.enabled = false;
 
 		this.port = 8000;
-		this.socket_timeout = 500;
+		this.socket_timeout = 1000;
 
 		this.velocity = 50;
 		this.direction = {x: 0, y: -100};
 		this.energy = 0;
+
+		this.interact_range = 64;
+		this.doors = [];
 	}
 
 	update(time, dt) {
@@ -49,7 +59,7 @@ class RobotRoom extends Phaser.Scene {
 			this.socket_is_open = false;
 
 			if(this.enabled)
-				this.start_socket();
+				setTimeout(() => this.start_socket(), 100);
 		};
 
 		setTimeout(() => {
@@ -59,22 +69,25 @@ class RobotRoom extends Phaser.Scene {
 	}
 
 	load_room(room) {
-		const map = this.make.tilemap({ key: room.map });
+		const map = this.make.tilemap({ key: room });
 		const tileset = map.addTilesetImage('roguelike', 'roguelike');
 
-		const ground    = map.createStaticLayer('Ground', tileset, 0, 0);
-		const furniture = map.createStaticLayer('Furniture', tileset, 0, 0);
-		const objects   = map.createStaticLayer('Objects', tileset, 0, 0);
+		const ground  = map.createStaticLayer('Ground', tileset, 0, 0);
+		const layer1  = map.createStaticLayer('Layer1', tileset, 0, 0);
+		const layer2  = map.createDynamicLayer('Layer2', tileset, 0, 0);
 
-		furniture.setCollisionByProperty({ obstacle: true });
-		
-		this.target = { x: room.spawn.x,
-		                y: room.spawn.y };
+		const spawn = map.findObject('Objects', object => object.name == 'spawn');
 
-		this.robot = this.physics.add.sprite(this.target.x, this.target.y, 'robot');
+		this.doors = find_doors(layer2);
+
+		this.robot = this.physics.add.sprite(spawn.x, spawn.y, 'robot');
 		this.robot.setScale(0.5);
 
-		this.physics.add.collider(this.robot, furniture);
+		layer1.setCollisionByProperty({ obstacle: true });
+		this.physics.add.collider(this.robot, layer1);
+
+		layer2.setCollisionByProperty({ obstacle: true });
+		this.physics.add.collider(this.robot, layer2);
 
 		this.anims.create({
 			key: 'walking',
@@ -99,6 +112,7 @@ class RobotRoom extends Phaser.Scene {
 		let command = data.split(" ");
 		let retval  = "COMMAND_EXECUTED"
 
+		let closest_door = min(this.doors, door => dist(door, this.robot));
 		switch(command[0])
 		{
 			case "move":
@@ -110,6 +124,24 @@ class RobotRoom extends Phaser.Scene {
 			case "get_position":
 				retval = this.robot.x.toString() + " "
 				       + this.robot.y.toString();
+				break;
+
+			case "open_door":
+				if(closest_door.locked)
+					retval = "(;_;) Can't open door: the door is locked.";
+				else if(dist(closest_door, this.robot) > this.interact_range)
+					retval = "(;_;) Can't open door: no door in range";
+				else
+					open_door(closest_door);
+
+				break;
+
+			case "close_door":
+				if(dist(closest_door, this.robot) <= this.interact_range)
+					close_door(closest_door);
+				else
+					retval = "(;_;) Can't close door: no door in range";
+
 				break;
 		}
 
@@ -126,6 +158,97 @@ class RobotRoom extends Phaser.Scene {
 	}
 }
 
-function startSocket()
-{
+function find_doors(mapLayer) {
+	let doors = [];
+
+	mapLayer.forEachTile(tile => {
+		if(tile.properties.door && tile.properties.left) {
+			let ldoor = tile;
+			let rdoor = mapLayer.findTile(t => (t.properties.door && !t.properties.left),
+										  {},
+										  tile.x - 1, tile.y -1, 3, 3);
+
+			doors.push({
+				mapLayer: mapLayer,
+
+				left: ldoor,
+				right: rdoor,
+				open: tile.properties.open,
+				locked: tile.properties.locked,
+
+				x: (ldoor.pixelX + rdoor.pixelX) / 2,
+				y: (ldoor.pixelY + rdoor.pixelY) / 2,
+			});
+		}
+	});
+
+	return doors;
+}
+
+function open_door(door) {
+	door.open = true;
+	door.locked = false;
+
+	door.left.properties.open = true;
+	door.right.properties.open = false;
+
+	door.left.properties.locked = true;
+	door.right.properties.locked = false;
+
+	door.left.properties.obstacle = false;
+	door.right.properties.obstacle = false;
+
+	door.left.index = DOOR_OPEN_LEFT;
+	door.right.index = DOOR_OPEN_RIGHT;
+
+	door.mapLayer.putTileAt(door.left, door.left.x, door.left.y);
+	door.mapLayer.putTileAt(door.right, door.right.x, door.right.y);
+}
+
+function close_door(door) {
+	door.open = false;
+	door.locked = false;
+
+	door.left.properties.open = false;
+	door.right.properties.open = false;
+
+	door.left.properties.locked = false;
+	door.right.properties.locked = false;
+
+	door.left.properties.obstacle = true;
+	door.right.properties.obstacle = true;
+
+	door.left.index = DOOR_CLOSED_LEFT;
+	door.right.index = DOOR_CLOSED_RIGHT;
+
+	door.mapLayer.putTileAt(door.left, door.left.x, door.left.y);
+	door.mapLayer.putTileAt(door.right, door.right.x, door.right.y);
+}
+
+function lock_door(door) {
+	door.open = false;
+	door.locked = true;
+
+	door.left.properties.open = false;
+	door.right.properties.open = false;
+
+	door.left.properties.locked = true;
+	door.right.properties.locked = true;
+
+	door.left.properties.obstacle = true;
+	door.right.properties.obstacle = true;
+
+	door.left.index = DOOR_LOCKED_LEFT;
+	door.right.index = DOOR_LOCKED_RIGHT;
+
+	door.mapLayer.putTileAt(door.left, door.left.x, door.left.y);
+	door.mapLayer.putTileAt(door.right, door.right.x, door.right.y);
+}
+
+function dist(a, b) {
+	return Math.sqrt( Math.pow(a.x - b.x, 2.0) + Math.pow(a.y - b.y, 2.0) );
+}
+
+function min(list, metric) {
+	return list.reduce( (x, xmin) => metric(x) < metric(xmin) ? x : xmin );
 }

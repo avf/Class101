@@ -6,7 +6,9 @@ module Robocom ( RobotProgram,
                  robot_move,
                  robot_left, robot_down, robot_up, robot_right,
                  robot_getPosition,
-                 robot_showPosition,
+                 robot_printPosition,
+
+                 robot_openDoor, robot_closeDoor,
                ) where
 
 import           Network.WebSockets as WS
@@ -62,16 +64,21 @@ robot_sockapp program sock = do
 robot_do :: RobotProgram () -> IO ()
 robot_do = runSocketApp . robot_sockapp
 
-robot_send :: String -> RobotProgram ()
-robot_send msg = do
-    conn <- ask
-    lift $ WS.sendTextData conn (pack msg)
-
 robot_recv :: RobotProgram String
 robot_recv = do
     conn <- ask
     msg <- lift $ WS.receiveData conn
     return (unpack msg)
+
+robot_cmd :: String -> RobotProgram String
+robot_cmd msg = do
+    conn <- ask
+    lift $ WS.sendTextData conn (pack msg)
+    lift $ putStrLn $ "Message sent: " <> msg
+    robot_recv
+
+robot_send :: String -> RobotProgram ()
+robot_send msg = robot_cmd msg >>= (lift . putStrLn)
 
 type Position = (Int, Int)
 
@@ -80,10 +87,9 @@ robot_move dx dy = robot_send $ "move " <> (show dx) <> " " <> (show dy)
 
 robot_getPosition :: RobotProgram Position
 robot_getPosition = do
-    robot_send "get_position"
-    as_position <$> robot_recv
+    posFromString <$> robot_cmd "get_position"
         where
-            as_position msg =
+            posFromString msg =
                 let coords = read <$> Prelude.words msg
                  in (coords !! 0, coords !! 1)
 
@@ -99,9 +105,15 @@ robot_up dy = robot_move 0 (- dy)
 robot_down :: Int -> RobotProgram ()
 robot_down dy = robot_move 0 dy
 
-robot_showPosition :: RobotProgram ()
-robot_showPosition = do
+robot_printPosition :: RobotProgram ()
+robot_printPosition = do
     (x, y) <- robot_getPosition
     lift $ putStrLn $ "ROBOT POSITION:\n"
                    <> "\tx: " <> (show x) <> "\n"
                    <> "\ty: " <> (show y)
+
+robot_openDoor :: RobotProgram ()
+robot_openDoor = robot_send "open_door"
+
+robot_closeDoor :: RobotProgram ()
+robot_closeDoor = robot_send "close_door"

@@ -7,13 +7,14 @@
 
 		<title>Class 101</title>
 
-		<link rel="stylesheet" type="text/css" href="css/style.css">
+		<link rel="stylesheet" type="text/css" href="style/style.css">
 
 		<script src="lib/phaser.min.js"> </script>
 
 		<script src="app/dialogues/0a.intro.js"> </script>
 		<script src="app/dialogues/0b.setup.js"> </script>
 		<script src="app/dialogues/level1.js"> </script>
+		<script src="app/dialogues/level2.js"> </script>
 
 		<script src="app/character.js"> </script>
 		<script src="app/levels.js"> </script>
@@ -185,8 +186,8 @@
 					<span class="code">Num p => p</span>. This is because the
 					symbol <span class="code">4</span> can be interpreted as
 					several different types (it could be an integer or a
-					floating-point number). But Haskell knows that it's a
-					number, which is what ‘Num’ stands for. Although it's
+					floating-point number, for instance). But Haskell knows that
+					it's a number, which is what ‘Num’ stands for. Although it's
 					strongly typed, Haskell can do <strong>type
 					inference</strong>, and it guesses the type of an expression
 					based on the context in which it appears. Since there is no
@@ -201,6 +202,59 @@
 					<span class="code">4 / 5</span> (floating-point division)<br>
 					<span class="code">15 `mod` 2</span> (modulo function)<br>
 					<span class="code">3 + (cos 0) / (sin (-1))</span><br>
+				</p>
+			</div>
+
+			<div id="Piloting the robot">
+				<h1>Piloting the robot</h1>
+
+				<p>
+				To pilot the robot, we use <em>robot commands</em>. The function
+				<span class='code'>robot_do</span> is used to convert robot
+				commands into IO commands, so that they can be used as the
+				program's main.
+				</p>
+
+				<p>
+				Here's an example of a program using robot commands:
+
+				<div class='code'>
+					import Robocom<br>
+					main = robot_do $ robot_move 50 (-50)
+				</div>
+
+				The first line imports the Robocom library. This makes robocom
+				functions like <span class='code'>robot_do</span> available in
+				the file.
+
+				Then we execute a robot command that moves the robot 50 units
+				left and (-50) units down (50 units up).
+				</p>
+
+				<p>
+				To compile a program that uses the Robocom library, use the
+				following command:
+
+				<div class='code'>
+					stack ghc -- main.hs robocom.hs
+				</div>
+				</p>
+
+				<p>
+				List of Robot commands:
+
+				<ul>
+					<li>
+						<span class='code'>robot_move dx dy</span>: moves the
+						robot dx units along the x axis (left to right) and dy
+						units along the y axis (top to bottom).
+					</li>
+
+					<li>
+						<span class='code'>robot_printPosition</span>: prints
+						the robot's position to the terminal.
+					</li>
+				</ul>
 				</p>
 			</div>
 

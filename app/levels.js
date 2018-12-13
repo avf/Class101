@@ -21,9 +21,14 @@ const LEVELS = [
 		notesVisible: true,
 		notes: ['Setting up Haskell', 'Compiling Haskell', 'Haskell expressions', 'Terminology'],
 		terms: ['Referential transparency'],
-		room: {
-			map: "level1",
-			spawn: {x: 24, y: 120},
-		},
+		room: "level1",
+	},
+
+	{
+		dialogue: DLG_LEVEL2,
+		canvasVisible: true,
+		notesVisible: true,
+		notes: ['Setting up Haskell', 'Compiling Haskell', 'Haskell expressions', 'Terminology', 'Piloting the robot'],
+		terms: ['Referential transparency'],
 	},
 ];
