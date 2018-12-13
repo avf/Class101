@@ -1,7 +1,7 @@
 const DLG_SETUP = [
 	{
 		text: ["To begin with, let's install Haskell.",
-			"First you need to <a href='docs.haskellstack.org/en/stable/install_and_upgrade'>install stack</a>.",
+			"First you need to <a href='https://docs.haskellstack.org/en/stable/install_and_upgrade'>install stack</a>.",
 			"Just follow the instructions on Stack's website.",
 			"Once it is installed, run the command <span class='code'>stack setup</span>.",
 			"It will install ghc, which is Haskell's compiler." ],

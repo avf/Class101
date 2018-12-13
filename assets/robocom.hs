@@ -49,7 +49,7 @@ type RobotProgram a = ReaderT WS.Connection IO a
 
 robot_sockapp :: RobotProgram () -> SockApp
 robot_sockapp program sock = do
-    putStrLn "Waiting for connection..."
+    putStrLn "Waiting for connection (this might take a few seconds)..."
     (conn', _) <- Socket.accept sock
     putStrLn "Connexion received."
 

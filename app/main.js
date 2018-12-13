@@ -1,7 +1,7 @@
 class App extends Phaser.Scene {
 	constructor() {
 		super('App');
-		this.level = 2;
+		this.level = 0;
 	}
 
 	preload() {
